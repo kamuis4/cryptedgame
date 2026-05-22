@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>PROTOCOLE ECHO // NODE 01</title>
+
+<style>
+body{
+    margin:0;
+    background:#000;
+    font-family: Courier New, monospace;
+    overflow:hidden;
+    color:#777;
+}
+
+/* TIMER */
+#timer{
+    position:fixed;
+    top:10px;
+    left:10px;
+    color:#00ff88;
+    font-size:18px;
+    z-index:1000;
+}
+
+/* START */
+#start{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:#000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+#start button{
+    padding:18px 30px;
+    border:1px solid #00ff88;
+    background:transparent;
+    color:#00ff88;
+    cursor:pointer;
+}
+
+/* POPUP */
+#popup{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.95);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:900;
+}
+
+#popupBox{
+    width:60%;
+    border:1px solid #00ff88;
+    padding:20px;
+    background:#000;
+    line-height:1.6;
+}
+
+#systeme{
+    color:#00ff88;
+    font-weight:bold;
+    text-shadow:0 0 8px #00ff88;
+}
+
+/* BAG */
+#bagBtn{
+    position:fixed;
+    right:10px;
+    top:10px;
+    border:1px solid #00ff88;
+    padding:10px;
+    color:#00ff88;
+    cursor:pointer;
+    z-index:1000;
+}
+
+#bag{
+    position:fixed;
+    right:10px;
+    top:60px;
+    width:300px;
+    border:1px solid #00ff88;
+    padding:15px;
+    display:none;
+    background:rgba(0,0,0,0.95);
+    z-index:1000;
+}
+
+#bagContent p{
+    margin:12px 0;
+    color:#999;
+    font-size: 13px;
+    border-bottom: 1px solid #111;
+    padding-bottom: 5px;
+}
+
+#bagNav{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-top:15px;
+    color:#00ff88;
+}
+
+#bagNav button{
+    background:#000;
+    border:1px solid #00ff88;
+    color:#00ff88;
+    cursor:pointer;
+    padding: 5px 10px;
+}
+
+/* BACKGROUND CHAOS */
+.bg{
+    position:absolute;
+    white-space:nowrap;
+    opacity:0.4;
+}
+
+.big{ font-size:55px; }
+.mid{ font-size:26px; }
+.small{ font-size:12px; }
+
+@keyframes move1{
+    0%{transform:translate3d(110vw,0,0);}
+    100%{transform:translate3d(-150vw,0,0);}
+}
+@keyframes move2{
+    from{transform:translateX(110vw);}
+    to{transform:translateX(-120vw);}
+}
+@keyframes move3{
+    from{transform:translateX(90vw);}
+    to{transform:translateX(-140%);}
+}
+
+/* CRYPTO */
+.crypto{
+    position:absolute;
+    font-size:14px;
+    color:#777;
+    opacity:0.4;
+    white-space:nowrap;
+}
+
+/* INPUT */
+#inputZone{
+    position:fixed;
+    bottom:40px;
+    width:100%;
+    text-align:center;
+    z-index:1000;
+}
+
+#input{
+    background:#000;
+    border:1px solid #00ff88;
+    color:#00ff88;
+    padding:10px;
+    width:260px;
+    font-family:Courier New;
+}
+
+button{
+    background:#000;
+    border:1px solid #00ff88;
+    color:#00ff88;
+    padding:10px;
+    cursor:pointer;
+}
+
+/* VICTOIRE */
+#successScreen {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    z-index: 3000;
+    flex-direction: column;
+    justify-content: center; align-items: center;
+    color: #00ff88;
+    text-align: center;
+}
+
+.glitch-text {
+    font-size: 50px;
+    letter-spacing: 10px;
+    text-shadow: 2px 0 #ff3333, -2px 0 #3333ff;
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes shake {
+    0% { transform: translate(0); }
+    20% { transform: translate(-10px, 5px); background: #004422; }
+    40% { transform: translate(10px, -5px); }
+    100% { transform: translate(0); }
+}
+.shake-anim { animation: shake 0.3s ease-in-out; }
+</style>
+</head>
+
+<body>
+
+<div id="timer">00:00</div>
+
+<div id="start">
+    <button onclick="startGame()">INITIALIZE SESSION</button>
+</div>
+
+<div id="popup">
+    <div id="popupBox">
+        <h2>MISSION BRIEFING</h2>
+        <p>
+            Accès au système <span id="systeme">SYSTEME</span>.<br><br>
+            Archive instable détectée. Les fragments de données peuvent guider votre décryptage, mais l'extraction sature les processeurs de temps.<br><br>
+            <span style="color:#ff3333; font-size: 13px;">[AVERTISSEMENT] : La consultation et la navigation des ARCHIVES génèrent une instabilité temporelle (+5 min par action).</span>
+        </p>
+        <button onclick="closePopup()">[ X ACCEPTER LE PROTOCOLE ]</button>
+    </div>
+</div>
+
+<div id="bagBtn">ARCHIVE</div>
+
+<div id="bag">
+    <div id="bagContent"></div>
+    <div id="bagNav">
+        <button onclick="prevPage()">◀</button>
+        <span id="pageInfo">1/1</span>
+        <button onclick="nextPage()">▶</button>
+    </div>
+</div>
+
+<div class="crypto" id="crypto-msg" style="top:30%; left:100%;">AOL ZLJYLA PZ HSPCL</div>
+
+<div class="bg big" style="top:5%; animation:move1 13s linear infinite;">SYSTEME SYSTEME SYSTEME SYSTEME SYSTEME</div>
+<div class="bg small" style="top:8%; animation:move2 11s linear infinite;">8 - 1</div>
+<div class="bg mid" style="top:11%; animation:move3 12s linear infinite;">DATA STREAM CORRUPTED NODE ACTIVE SIGNAL</div>
+<div class="bg small" style="top:14%; animation:move1 10s linear infinite;">14 - 7</div>
+<div class="bg big" style="top:17%; animation:move2 14s linear infinite;">ARCHIVE ECHO PROTOCOL MEMORY FRAGMENT</div>
+<div class="bg small" style="top:20%; animation:move3 11s linear infinite;">3 + 4</div>
+<div class="bg mid" style="top:23%; animation:move1 12s linear infinite;">TRANSMISSION LOST SIGNAL BROKEN SYSTEM NODE</div>
+<div class="bg small" style="top:26%; animation:move2 13s linear infinite;">21 / 3</div>
+<div class="bg big" style="top:29%; animation:move3 10s linear infinite;">MEMORY CORRUPTED MEMORY CORRUPTED MEMORY</div>
+<div class="bg mid" style="top:32%; animation:move1 11s linear infinite;">ECHO SYSTEM FAILURE DETECTED IN NODE</div>
+<div class="bg small" style="top:35%; animation:move2 12s linear infinite;">7 + 0</div>
+<div class="bg big" style="top:38%; animation:move3 14s linear infinite;">SIGNAL SIGNAL SIGNAL LOST LOST LOST</div>
+<div class="bg mid" style="top:41%; animation:move1 10s linear infinite;">ARCHIVE NODE ACTIVE CORRUPTION DETECTED</div>
+<div class="bg small" style="top:44%; animation:move2 13s linear infinite;">10 - 3</div>
+<div class="bg big" style="top:47%; animation:move3 12s linear infinite;">SYSTEME SYSTEME SYSTEME OVERLOAD</div>
+<div class="bg mid" style="top:50%; animation:move1 11s linear infinite;">DATA FRAGMENT LOST RECOVERY MODE</div>
+<div class="bg small" style="top:53%; animation:move2 12s linear infinite;">8 - 1</div>
+<div class="bg mid" style="top:56%; animation:move3 14s linear infinite;">ECHO PROTOCOL RUNNING BACKGROUND</div>
+<div class="bg big" style="top:59%; animation:move1 13s linear infinite;">ARCHIVE CORRUPTED ARCHIVE CORRUPTED</div>
+<div class="bg small" style="top:62%; animation:move2 10s linear infinite;">3 + 4</div>
+<div class="bg mid" style="top:65%; animation:move3 11s linear infinite;">NODE FAILURE DETECTED NODE FAILURE</div>
+<div class="bg big" style="top:68%; animation:move1 12s linear infinite;">SYSTEME SYSTEME SYSTEME SYSTEME</div>
+<div class="bg small" style="top:71%; animation:move2 13s linear infinite;">21 / 3</div>
+<div class="bg mid" style="top:74%; animation:move3 10s linear infinite;">ECHO PROTOCOL ACTIVE SIGNAL MONITOR</div>
+<div class="bg big" style="top:77%; animation:move1 14s linear infinite;">DATA STREAM DATA STREAM DATA STREAM</div>
+<div class="bg small" style="top:80%; animation:move2 11s linear infinite;">14 - 7</div>
+<div class="bg mid" style="top:83%; animation:move3 12s linear infinite;">SYSTEME NODE ONLINE BUT CORRUPTED</div>
+<div class="bg big" style="top:86%; animation:move1 13s linear infinite;">ENDLESS LOOP DETECTED ENDLESS LOOP</div>
+<div class="bg small" style="top:89%; animation:move2 10s linear infinite;">7 + 0</div>
+
+<div id="inputZone">
+    <input id="input" placeholder="ENTER ACCESS KEY">
+    <button onclick="check()">VALIDATE</button>
+</div>
+
+<div id="successScreen">
+    <h1 class="glitch-text">ACCESS GRANTED</h1>
+    <p style="color:#555; margin-bottom: 30px;">ACCÈS AUTORISÉ. MAIS QUELQUE CHOSE CONTINUE DE VOUS OBSERVER.</p>
+    
+    <div style="border:1px solid #00ff88; padding:20px; font-size:18px;">
+        THE SECRET IS ALIVE
+    </div>
+    <button onclick="location.reload()" style="margin-top:40px; border-color:#222; color:#222;">REBOOT</button>
+</div>
+
+<script>
+let timer = 0;
+let started = false;
+
+function startGame(){
+    document.getElementById("start").style.display="none";
+    document.getElementById("popup").style.display="flex";
+    setupCryptoBehavior();
+}
+
+function closePopup(){
+    document.getElementById("popup").style.display="none";
+    if(!started){
+        started=true;
+        setInterval(()=>{
+            if(!started) return;
+            timer++;
+            updateTimerDisplay();
+        },1000);
+    }
+}
+
+function updateTimerDisplay(){
+    let m = String(Math.floor(timer/60)).padStart(2,'0');
+    let s = String(timer%60).padStart(2,'0');
+    document.getElementById("timer").innerText = `${m}:${s}`;
+}
+
+const archives = [
+    "LOG_01: Regarde bien. Un détail inutile cache souvent l'essentiel.",
+    "LOG_02: [PIÈGE] Hash MD5 détecté. Brute-force requise sur 'Standard_Pass.txt'.",
+    "LOG_03: Le silence est d'or, mais le bruit est bavard. Observez le flux.",
+    "LOG_04: Stratégie tactique : Consulter les méthodes de 'De Bello Gallico'.",
+    "LOG_05: 'La Septième Légion - Fidelis Constans' était la clé du noyau.",
+    "LOG_06: Convergence arithmétique confirmée. Somme totale = Rotation.",
+    "LOG_07: [WARNING] SHIFT=3 est une injection de bruit. Ignorer le tertiaire."
+];
+
+let currentPage = 0;
+const perPage = 3;
+
+function applyPenalty() {
+    timer += 300; // +5 minutes
+    updateTimerDisplay();
+    document.body.classList.add('shake-anim');
+    setTimeout(()=>document.body.classList.remove('shake-anim'), 300);
+}
+
+document.getElementById("bagBtn").onclick = () => {
+    let b = document.getElementById("bag");
+    let isOpening = b.style.display !== "block";
+    b.style.display = isOpening ? "block" : "none";
+
+    // Pénalité à chaque ouverture
+    if(isOpening){
+        applyPenalty();
+        renderBag();
+    }
+};
+
+function renderBag(){
+    const container = document.getElementById("bagContent");
+    container.innerHTML = "";
+    const start = currentPage * perPage;
+    const end = start + perPage;
+    const pageItems = archives.slice(start, end);
+
+    pageItems.forEach(item=>{
+        let p = document.createElement("p");
+        p.innerText = item;
+        container.appendChild(p);
+    });
+
+    let totalPages = Math.ceil(archives.length / perPage);
+    document.getElementById("pageInfo").innerText = (currentPage+1) + "/" + totalPages;
+}
+
+function nextPage(){
+    let maxPage = Math.ceil(archives.length / perPage) - 1;
+    if(currentPage < maxPage){
+        currentPage++;
+        applyPenalty(); // Pénalité changement de page
+        renderBag();
+    }
+}
+
+function prevPage(){
+    if(currentPage > 0){
+        currentPage--;
+        applyPenalty(); // Pénalité changement de page
+        renderBag();
+    }
+}
+
+function check(){
+    let v = document.getElementById("input").value.toUpperCase().trim();
+    if(v === "THE SECRET IS ALIVE"){
+        started = false;
+        document.getElementById("successScreen").style.display = "flex";
+        document.getElementById("successScreen").classList.add("shake-anim");
+    } else {
+        let el = document.getElementById("input");
+        el.style.borderColor = "#ff3333";
+        el.style.color = "#ff3333";
+        setTimeout(() => {
+            el.style.borderColor = "#00ff88";
+            el.style.color = "#00ff88";
+        }, 500);
+    }
+}
+
+function setupCryptoBehavior() {
+    const el = document.getElementById("crypto-msg");
+    const positions = ["10%", "25%", "40%", "60%", "75%", "90%"];
+    let x = window.innerWidth;
+
+    function loop() {
+        x -= 2;
+        el.style.left = x + "px";
+        const width = el.offsetWidth;
+        if (x < -width) {
+            x = window.innerWidth + 50;
+            el.style.top = positions[Math.floor(Math.random() * positions.length)];
+        }
+        requestAnimationFrame(loop);
+    }
+    loop();
+}
+</script>
+</body>
+</html>
