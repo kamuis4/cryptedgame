@@ -69,7 +69,7 @@ body{
     text-shadow:0 0 8px #00ff88;
 }
 
-/* BAG */
+/* BAG (Ajusté pour textes longs) */
 #bagBtn{
     position:fixed;
     right:10px;
@@ -85,20 +85,22 @@ body{
     position:fixed;
     right:10px;
     top:60px;
-    width:300px;
+    width:400px;
     border:1px solid #00ff88;
     padding:15px;
     display:none;
-    background:rgba(0,0,0,0.95);
+    background:rgba(0,0,0,0.98);
     z-index:1000;
+    box-shadow: 0 0 20px rgba(0,255,136,0.1);
 }
 
 #bagContent p{
-    margin:12px 0;
-    color:#999;
+    margin:15px 0;
+    color:#aaa;
     font-size: 13px;
-    border-bottom: 1px solid #111;
-    padding-bottom: 5px;
+    border-left: 2px solid #00ff88;
+    padding-left: 10px;
+    line-height: 1.4;
 }
 
 #bagNav{
@@ -225,7 +227,7 @@ button{
         <h2>MISSION BRIEFING</h2>
         <p>
             Accès au système <span id="systeme">SYSTEME</span>.<br><br>
-            Archive instable détectée. Les fragments de données peuvent guider votre décryptage, mais l'extraction sature les processeurs de temps.<br><br>
+            Archive instable détectée. Consulter les fragments peut aider à percer le cryptage, mais chaque accès sature les processeurs de temps.<br><br>
             <span style="color:#ff3333; font-size: 13px;">[AVERTISSEMENT] : La consultation et la navigation des ARCHIVES génèrent une instabilité temporelle (+5 min par action).</span>
         </p>
         <button onclick="closePopup()">[ X ACCEPTER LE PROTOCOLE ]</button>
@@ -318,21 +320,22 @@ function updateTimerDisplay(){
     document.getElementById("timer").innerText = `${m}:${s}`;
 }
 
+// TES NOUVEAUX INDICES
 const archives = [
-    "LOG_01: Regarde bien. Un détail inutile cache souvent l'essentiel.",
-    "LOG_02: [PIÈGE] Hash MD5 détecté. Brute-force requise sur 'Standard_Pass.txt'.",
-    "LOG_03: Le silence est d'or, mais le bruit est bavard. Observez le flux.",
-    "LOG_04: Stratégie tactique : Consulter les méthodes de 'De Bello Gallico'.",
-    "LOG_05: 'La Septième Légion - Fidelis Constans' était la clé du noyau.",
-    "LOG_06: Convergence arithmétique confirmée. Somme totale = Rotation.",
-    "LOG_07: [WARNING] SHIFT=3 est une injection de bruit. Ignorer le tertiaire."
+    "ID_01: Anomalies détectées dans plusieurs flux numériques.",
+    "ID_02: Des opérations simples apparaissent de manière répétée dans le système.",
+    "ID_03: Les résultats semblent converger vers une valeur récurrente.",
+    "ID_04: Des systèmes anciens utilisaient des substitutions de caractères pour masquer des messages.",
+    "ID_05: Certains anciens protocoles de communication utilisaient des méthodes de substitution où chaque symbole était remplacé par un autre selon une règle fixe. Ces techniques servaient à masquer des messages lisibles uniquement par ceux connaissant la règle.",
+    "ID_06: /* DOCUMENT SECRET */ DOCUMENT INTERNE — Les anciens systèmes de transmission utilisaient des transformations simples pour protéger les messages. Des analyses ont révélé que certains flux actuels présentent des décalages constants appliqués aux caractères.",
+    "ID_07: Le système de substitution repose sur un décalage constant des caractères dans l’alphabet (SHIFT)."
 ];
 
 let currentPage = 0;
 const perPage = 3;
 
 function applyPenalty() {
-    timer += 300; // +5 minutes
+    timer += 300; 
     updateTimerDisplay();
     document.body.classList.add('shake-anim');
     setTimeout(()=>document.body.classList.remove('shake-anim'), 300);
@@ -343,7 +346,6 @@ document.getElementById("bagBtn").onclick = () => {
     let isOpening = b.style.display !== "block";
     b.style.display = isOpening ? "block" : "none";
 
-    // Pénalité à chaque ouverture
     if(isOpening){
         applyPenalty();
         renderBag();
@@ -371,7 +373,7 @@ function nextPage(){
     let maxPage = Math.ceil(archives.length / perPage) - 1;
     if(currentPage < maxPage){
         currentPage++;
-        applyPenalty(); // Pénalité changement de page
+        applyPenalty();
         renderBag();
     }
 }
@@ -379,7 +381,7 @@ function nextPage(){
 function prevPage(){
     if(currentPage > 0){
         currentPage--;
-        applyPenalty(); // Pénalité changement de page
+        applyPenalty();
         renderBag();
     }
 }
