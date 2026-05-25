@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ECHO_OS // V5.1_FINAL_STABLE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="desktop">
+
+    <div id="widgets-container">
+        <div class="widget">
+            <b>Système Monitor</b>
+            CPU: <span id="cpu-val">21%</span>
+            <div class="progress-bar"><div id="cpu-bar" class="progress-fill" style="width: 21%"></div></div>
+            RAM: 4.2 / 16 GB
+        </div>
+        <div class="widget">
+            <b>Cloud Storage</b>
+            <span style="color:#ff4444">Quota dépassé (102%)</span>
+            <div class="progress-bar"><div class="progress-fill" style="width: 100%; background:#ff4444"></div></div>
+            <small>Kevin: 5.1 GB / 5 GB</small>
+        </div>
+        <div class="widget">
+            <b>Session</b>
+            User: <span id="user-display">GUEST</span><br>
+            Status: <span id="status-display" style="color:#aaa">Locked</span>
+        </div>
+    </div>
+
+    <div id="icons-grid">
+        <div class="icon" onclick="openWin('win-files')"><div class="img">📁</div><span>Documents</span></div>
+        <div class="icon" onclick="openWin('win-msg')"><div class="img">✉️</div><span>Messages</span></div>
+        <div class="icon" onclick="openWin('win-net')"><div class="img">🌐</div><span>NetNav</span></div>
+        <div class="icon" onclick="openWin('win-term')"><div class="img">💻</div><span>Terminal</span></div>
+        <div class="icon" onclick="openWin('win-trash')"><div class="img">🗑️</div><span>Corbeille</span></div>
+        <div class="icon" onclick="openWin('win-settings')"><div class="img">⚙️</div><span>Paramètres</span></div>
+    </div>
+
+    <div id="win-files" class="window" style="width:700px; height:450px; top:100px; left:150px;">
+        <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)"><span>📁 Documents</span><span onclick="closeWin('win-files')" style="cursor:pointer">✖</span></div>
+       <div class="win-content" id="explorer-view" style="padding:20px; display:grid; grid-template-columns: repeat(auto-fill, 120px); gap:20px;">
+    </div>
+    </div>
+
+    <div id="win-pdf" class="window" style="width:650px; height:700px; top:30px; left:400px; background:#525659;">
+        <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)"><span id="pdf-header">Reader</span><span onclick="closeWin('win-pdf')" style="cursor:pointer">✖</span></div>
+        <div class="win-content" id="pdf-content" style="padding:20px;"></div>
+    </div>
+
+    <div id="win-term" class="window" style="width:500px; height:300px; top:400px; left:80px;">
+        <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)"><span>💻 Terminal</span><span onclick="closeWin('win-term')" style="cursor:pointer">✖</span></div>
+        <div class="win-content" style="background:#000; color:lime; padding:10px; font-family:monospace;">
+            <pre id="log">ECHO_OS V5.1 KERNEL... SESSION LOCKED.</pre>
+            <div style="display:flex;"><span>> </span><input id="cmd" onkeydown="term(event)" style="background:transparent; border:none; color:lime; outline:none; width:100%; font-family:inherit;"></div>
+        </div>
+    </div>
+
+    <div id="win-trash" class="window" style="width:350px; height:300px; top:250px; left:500px;">
+        <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)"><span>🗑️ Corbeille</span><span onclick="closeWin('win-trash')" style="cursor:pointer">✖</span></div>
+        <div class="win-content" style="padding:20px; text-align:center;">
+            <div onclick="openWin('win-anti')" style="cursor:pointer;"><div style="font-size:45px;">🛡️</div><span>Antivirus.exe</span></div>
+        </div>
+    </div>
+
+    <div id="win-anti" class="window" style="width:440px; height:520px; top:100px; left:400px;">
+        <div class="titlebar" style="background:#cc0000;" onmousedown="dragWindow(event, this.parentElement)"><span>🛡️ ECHO_SHIELD Scan</span><span onclick="closeWin('win-anti')" style="cursor:pointer">✖</span></div>
+        <div class="win-content" style="background:#111; color:white; text-align:center; padding:10px;">
+            <p id="snakeStatus">Scan mémoire : Éliminez les menaces.</p>
+            <canvas id="snakeCanvas" width="380" height="380"></canvas>
+            <h3 id="snakeRes" style="margin-top:10px; color:lime;"></h3>
+        </div>
+    </div>
+
+    <div id="win-settings" class="window" style="width:400px; height:300px;"><div class="titlebar"><span>⚙️ Paramètres</span><span onclick="closeWin('win-settings')">✖</span></div><div class="win-content" style="padding:20px;">Appareil : <b>KAMUIS</b></div></div>
+<div id="win-msg" class="window" style="width:350px; height:400px; top:50px; left:50px;">
+    <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)">
+        <span>✉️ Inbox</span><span onclick="closeWin('win-msg')" style="cursor:pointer">✖</span>
+    </div>
+    <div class="win-content" id="msg-list" style="padding:10px;">
+        <div style="padding:10px; border-bottom:1px solid #eee;">
+            <b>Patron (E. Leclerc)</b><br><small>Kevin, ton CV management est top.</small>
+        </div>
+    </div>
+</div> <div id="win-net" class="window" style="width:850px; height:550px; top:100px; left:100px;">
+    <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)">
+        <span>🌐 NetNav</span><span onclick="closeWin('win-net')" style="cursor:pointer">✖</span>
+    </div>
+    <div class="win-content" style="display:flex; height:100%;">
+    <div style="width:180px; background:#f3f3f3; border-right:1px solid #ddd; padding:10px;">
+    <div class="nav-item" onclick="loadPage('home')">Accueil</div>
+    <div class="nav-item" onclick="loadPage('ai')">Rapport IA</div>
+    <div class="nav-item" onclick="loadPage('project_0c')">Projet 0x0C</div>
+    <div class="nav-item" onclick="loadPage('decodage_vigenere')">Déchiffreur Vigenère</div>
+    <div class="nav-item" onclick="loadPage('xor_doc')">Doc XOR</div> <div class="nav-item" onclick="loadPage('gov')">Gouv.fr</div>
+</div>
+<div id="net-content" style="flex-grow:1; background: white;">
+    </div>    </div>
+</div>
+</div> 
+
+<div id="taskbar">
+    <div style="font-weight:bold; margin-right:20px; cursor:pointer;">START</div>
+    <div id="timer">30:00</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
