@@ -73,14 +73,29 @@
         </div>
     </div>
 
-    <div id="win-settings" class="window" style="width:400px; height:300px;"><div class="titlebar"><span>⚙️ Paramètres</span><span onclick="closeWin('win-settings')">✖</span></div><div class="win-content" style="padding:20px;">Appareil : <b>KAMUIS</b></div></div>
-<div id="win-msg" class="window" style="width:350px; height:400px; top:50px; left:50px;">
+<div id="win-settings" class="window" style="width:400px; height:300px; top:150px; left:300px; display:none;">
+    <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)">
+        <span>⚙️ Paramètres</span>
+        <span onclick="closeWin('win-settings')" style="cursor:pointer">✖</span>
+    </div>
+    <div class="win-content">
+    <div class="setting-item">
+        <span>Mode sombre</span>
+        <input type="checkbox" checked>
+    </div>
+    <div class="setting-item">
+        <span>Volume système</span>
+        <input type="range">
+    </div>
+    <hr style="width:100%; border:0; border-top:1px solid #eee;">
+    <button onclick="alert('Système à jour')">Vérifier les mises à jour</button>
+</div>
+</div><div id="win-msg" class="window" style="width:350px; height:400px; top:50px; left:50px;">
     <div class="titlebar" onmousedown="dragWindow(event, this.parentElement)">
         <span>✉️ Inbox</span><span onclick="closeWin('win-msg')" style="cursor:pointer">✖</span>
     </div>
     <div class="win-content" id="msg-list" style="padding:10px;">
         <div style="padding:10px; border-bottom:1px solid #eee;">
-            <b>Patron (E. Leclerc)</b><br><small>Kevin, ton CV management est top.</small>
         </div>
     </div>
 </div> <div id="win-net" class="window" style="width:850px; height:550px; top:100px; left:100px;">

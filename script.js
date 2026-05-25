@@ -610,7 +610,54 @@ function launchChatInterface() {
         document.body.appendChild(winPopup);
     }, 20000); // 20000ms = 20 secondes
 }
+const INTERVAL_GOUV = 5 * 60 * 1000; // 5 minutes
 
+function lancerAlertesGouvernement() {
+    let intervalId = setInterval(() => {
+        if (messagesGouvEnvoyes < 6) {
+            afficherMessageGouvernement();
+        } else {
+            clearInterval(intervalId);
+        }
+    }, INTERVAL_GOUV);
+}
+const messagesG = [
+    "Une activité réseau inhabituelle a été détectée sur votre session.",
+    "Vos requêtes sortantes contreviennent aux protocoles de sécurité ECHO.",
+    "G : Votre historique de navigation est en cours d'analyse.",
+    "G : La limite des autorisations est atteinte. Cessez immédiatement.",
+    "G : Avertissement final. La déconnexion forcée est imminente.",
+    "G : Votre accès terminal a été marqué pour restriction définitive."
+];
+
+let messagesGouvEnvoyes = 0;
+
+function afficherMessageGouvernement() {
+    if (messagesGouvEnvoyes < messagesG.length) {
+        // 1. Récupérer la liste des messages
+        const msgList = document.getElementById("msg-list");
+        
+        // 2. Créer le nouveau message façon "Discord/Messenger"
+        const nouveauMsg = document.createElement("div");
+        nouveauMsg.style.cssText = "padding:10px; border-bottom:1px solid #eee; background: #fff5f5;";
+        
+        nouveauMsg.innerHTML = `
+            <b>G</b><br>
+            <small style="color: #d93025;">${messagesG[messagesGouvEnvoyes]}</small>
+        `;
+        
+        // 3. Ajouter en haut ou en bas de la liste
+        msgList.prepend(nouveauMsg);
+        
+        // 4. (Optionnel) Notification visuelle sur l'icône si tu en as une
+        // console.log("Message de G reçu");
+
+        messagesGouvEnvoyes++;
+    }
+}
+
+// Lancer le cycle au chargement de l'OS
+lancerAlertesGouvernement();
 // --- ICI : Appel global au chargement du système ---
 updateFiles();
 // Si tu veux que le snake démarre aussi :

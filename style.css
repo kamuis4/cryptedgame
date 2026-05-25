@@ -197,3 +197,15 @@ body, html {
     z-index: 999999; /* Z-index très élevé */
     background: #36393f; /* Couleur Discord */
 }
+
+/* Style général de la fenêtre */
+.window {
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 100;
+}
+
